@@ -7,24 +7,27 @@ use dms_INE_v2;
 select * from permanent_crop pc 
     inner join permanent_crop_name pcn on pc.pc_name_ID = pcn.pc_name_ID
     inner join region r on pc.NutsID = r.NutsID 
-where pc.year = 2019 and pcn.crop_name not like 'Total' and r.level_ID = 5
+where pc.year = 2019
+	and pcn.crop_name not like 'Total' and r.level_ID = 5
 order by pc.NutsID ;
 
 -- seleccionar colunas
-select pc.NutsID, pc.`year`, pc.`hold`, pcn.crop_name from permanent_crop pc 
+select pc.NutsID, pc.`year`, pc.`area`, pcn.crop_name, r.region_name from permanent_crop pc 
     inner join permanent_crop_name pcn on pc.pc_name_ID = pcn.pc_name_ID
     inner join region r on pc.NutsID = r.NutsID 
-where pc.year = 2019 and pcn.crop_name not like 'Total' and r.level_ID = 5
+where pc.year = 2019
+	and pcn.crop_name not like 'Total' and r.level_ID = 5
 order by pc.NutsID ;
 
 -- apagar tabela se já existir
 drop table if exists process_perm_crops;
 
 -- criar tabela temporária para processar
-create table dms_ine_v2.process_perm_crops select pc.NutsID, pc.`year`, pc.`hold`, pcn.crop_name from permanent_crop pc 
+create table dms_ine_v2.process_perm_crops select pc.NutsID, pc.`year`, pc.`area`, pcn.crop_name, r.region_name from permanent_crop pc 
     inner join permanent_crop_name pcn on pc.pc_name_ID = pcn.pc_name_ID
     inner join region r on pc.NutsID = r.NutsID 
-where pc.year = 2019 and pcn.crop_name not like 'Total' and r.level_ID = 5
+where pc.year = 2019
+	and pcn.crop_name not like 'Total' and r.level_ID = 5
 order by pc.NutsID ;
 
 -- ver tabela
@@ -35,12 +38,13 @@ select distinct  crop_name from process_perm_crops;
 
 -- criar tabela pivot (falta acrescentar as outras culturas)
 select NutsID, `year`,
-        max(CASE WHEN crop_name = 'Citrus plantations' then `hold` END) AS `Citrus plantations`,
-        max(CASE WHEN crop_name = 'Olive plantations' then `hold` END) AS `Olive plantations`,
-        max(CASE WHEN crop_name = 'Fresh fruit plantations (excluding citrus plantations)' then `hold` END) AS `Fresh fruit plantations (excluding citrus plantations)`,
-        max(CASE WHEN crop_name = 'Fruit plantations (subtropical climate zones)' then `hold` END) AS `Fruit plantations (subtropical climate zones)`,
-        max(CASE WHEN crop_name = 'Nuts plantations' then `hold` END) AS `Nuts plantations`,
-        max(CASE WHEN crop_name = 'Vineyards' then `hold` END) AS `Vineyards`,
-        max(CASE WHEN crop_name = 'Other permanent crops' then `hold` END) AS `Other permanent crops`
+        max(CASE WHEN crop_name = 'Citrus plantations' then `area` END) AS `Citrus plantations`,
+        max(CASE WHEN crop_name = 'Olive plantations' then `area` END) AS `Olive plantations`,
+        max(CASE WHEN crop_name = 'Fresh fruit plantations (excluding citrus plantations)' then `area` END) AS `Fresh fruit plantations (excluding citrus plantations)`,
+        max(CASE WHEN crop_name = 'Fruit plantations (subtropical climate zones)' then `area` END) AS `Fruit plantations (subtropical climate zones)`,
+        max(CASE WHEN crop_name = 'Nuts plantations' then `area` END) AS `Nuts plantations`,
+        max(CASE WHEN crop_name = 'Vineyards' then `area` END) AS `Vineyards`,
+        max(CASE WHEN crop_name = 'Other permanent crops' then `area` END) AS `Other permanent crops`,
+        region_name
 FROM process_perm_crops
 GROUP BY NutsID;

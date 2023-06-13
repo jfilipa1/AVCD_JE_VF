@@ -7,14 +7,14 @@ use dms_INE_v2;
 select * from permanent_crop pc 
     inner join permanent_crop_name pcn on pc.pc_name_ID = pcn.pc_name_ID
     inner join region r on pc.NutsID = r.NutsID 
-where pc.year = 2019 or pc.year = 2009 or pc.year = 1999 or pc.year = 1989 and pcn.crop_name not like 'Total' and r.level_ID = 5
+where pc.year = 2019 and pcn.crop_name not like 'Total' and r.level_ID = 5
 order by pc.NutsID ;
 
 -- seleccionar colunas
 select pc.NutsID, pc.`year`, pc.`hold`, pcn.crop_name from permanent_crop pc 
     inner join permanent_crop_name pcn on pc.pc_name_ID = pcn.pc_name_ID
     inner join region r on pc.NutsID = r.NutsID 
-where pc.year = 2019 or pc.year = 2009 or pc.year = 1999 or pc.year = 1989 and pcn.crop_name not like 'Total' and r.level_ID = 5
+where pc.year = 2019 and pcn.crop_name not like 'Total' and r.level_ID = 5
 order by pc.NutsID ;
 
 -- apagar tabela se já existir
@@ -24,7 +24,7 @@ drop table if exists process_perm_crops;
 create table dms_ine_v2.process_perm_crops select pc.NutsID, pc.`year`, pc.`hold`, pcn.crop_name from permanent_crop pc 
     inner join permanent_crop_name pcn on pc.pc_name_ID = pcn.pc_name_ID
     inner join region r on pc.NutsID = r.NutsID 
-where pc.year = 2019 or pc.year = 2009 or pc.year = 1999 or pc.year = 1989 and pcn.crop_name not like 'Total' and r.level_ID = 5
+where pc.year = 2019 and pcn.crop_name not like 'Total' and r.level_ID = 5
 order by pc.NutsID ;
 
 -- ver tabela

@@ -7,14 +7,14 @@ use dms_INE_v2;
 select * from temporary_crop tc 
     inner join temporary_crop_name tcn on tc.tc_name_ID = tcn.tc_name_ID
     inner join region r on tc.NutsID = r.NutsID 
-where tc.year = 2019 or tc.year = 2009 or tc.year = 1999 or tc.year = 1989 and tcn.crop_name not like 'Total' and r.level_ID = 5
+where tc.year = 2019 and tcn.crop_name not like 'Total' and r.level_ID = 5
 order by tc.NutsID ;
 
 -- seleccionar colunas
 select tc.NutsID, tc.`year`, tc.`area`, tcn.crop_name from temporary_crop tc 
     inner join temporary_crop_name tcn on tc.tc_name_ID = tcn.tc_name_ID
     inner join region r on tc.NutsID = r.NutsID 
-where tc.year = 2019 or tc.year = 2009 or tc.year = 1999 or tc.year = 1989 and tcn.crop_name not like 'Total' and r.level_ID = 5
+where tc.year = 2019 and tcn.crop_name not like 'Total' and r.level_ID = 5
 order by tc.NutsID ;
 
 -- apagar tabela se já existir
@@ -24,7 +24,7 @@ drop table if exists process_temp_crops;
 create table dms_ine_v2.process_temp_crops select tc.NutsID, tc.`year`, tc.`area`, tcn.crop_name from temporary_crop tc 
     inner join temporary_crop_name tcn on tc.tc_name_ID = tcn.tc_name_ID
     inner join region r on tc.NutsID = r.NutsID 
-where tc.year = 2019 or tc.year = 2009 or tc.year = 1999 or tc.year = 1989 and tcn.crop_name not like 'Total' and r.level_ID = 5
+where tc.year = 2019 and tcn.crop_name not like 'Total' and r.level_ID = 5
 order by tc.NutsID ;
 
 -- ver tabela
